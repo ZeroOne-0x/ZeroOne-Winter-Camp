@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Intro</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="intro">Intro</h1>
+<h2 id="video---what-you-see">video - what you see</h2>
+<p>如果你有一个图像序列并以给定的频率进行更改（例如<a href="https://www.filmindependent.org/blog/hacking-film-24-frames-per-second/">每秒24张图像</a>），你就会产生运动的<a href="https://en.wikipedia.org/wiki/Persistence_of_vision">错觉</a>。总而言之，这是视频背后的基本概念：<strong>一系列以给定频率更换的图片/帧</strong>。</p>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\Linnet_kineograph_1886_x280.jpg" alt="flip book"></p>
+<p>Zeitgenössische Illustration (1886)</p>
+<h2 id="audio---what-you-listen">audio - what you listen</h2>
+<p>尽管默片（没有声音的视频）也有强大的表达力，但是声音可以带来更好的体验。</p>
+<blockquote>
+<p>在数字音频系统中，麦克风将声音转换为模拟电信号，然后模拟电信号转数字信号转换器（ADC）- 通常使用<a href="https://en.wikipedia.org/wiki/Pulse-code_modulation">脉冲编码调制（PCM）</a> - 将模拟信号转换为数字信号。</p>
+</blockquote>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\640px-CPT-Sound-ADC-DAC.svg.png" alt="audio analog to digital" title="audio analog to digital"></p>
+<blockquote>
+<p><a href="https://commons.wikimedia.org/wiki/File:CPT-Sound-ADC-DAC.svg">Source</a></p>
+</blockquote>
+<h2 id="codec---shrinking-data">codec - shrinking data</h2>
+<blockquote>
+<p>CODEC是一种电子电路或软件，可以 <strong>压缩或解压数字音频/视频。</strong> 它将原始（未压缩）数字音频/视频转换为压缩的格式，反之亦然。
+<a href="https://en.wikipedia.org/wiki/Video_codec">https://en.wikipedia.org/wiki/Video_codec</a></p>
+</blockquote>
+<p>如果我们将数百万个图像打包到一个文件中并称之为电影（视频），那么最终可能会得到一个体积巨大的文件。让我们来做个计算：</p>
+<p>假设我们创建一个分辨率为1080 x 1920（高x宽）的视频，视频每个像素将花费3个字节（屏幕上的最小点）来编码颜色（或<a href="https://en.wikipedia.org/wiki/Color_depth#True_color_.2824-bit.29">24位颜色</a>），这样能得到16,777,216种不同的颜色），该视频以每秒24帧的速度播放，并且长达30分钟。</p>
+<pre><code class="language-c"><div>toppf = <span class="hljs-number">1080</span> * <span class="hljs-number">1920</span> <span class="hljs-comment">//total_of_pixels_per_frame</span>
+cpp = <span class="hljs-number">3</span> <span class="hljs-comment">//cost_per_pixel</span>
+tis = <span class="hljs-number">30</span> * <span class="hljs-number">60</span> <span class="hljs-comment">//time_in_seconds</span>
+fps = <span class="hljs-number">24</span> <span class="hljs-comment">//frames_per_second</span>
+
+required_storage = tis * fps * toppf * cpp
+</div></code></pre>
+<p>这个视频大约需要250.28GB的存储空间或1.11Gbps的带宽来在线播放！ 这就是为什么我们需要使用<a href="https://github.com/leandromoreira/digital_video_introduction#how-does-a-video-codec-work">CODEC</a>。</p>
+<h2 id="container---a-comfy-place-for-audio-and-video">container - a comfy place for audio and video</h2>
+<blockquote>
+<p>容器或称包装器格式是一种元文件格式，描述了计算机文件中不同的数据和元数据元素如何共存。A container or wrapper format is a metafile format whose specification describes how different elements of data and metadata coexist in a computer file.
+<a href="https://en.wikipedia.org/wiki/Digital_container_format">https://en.wikipedia.org/wiki/Digital_container_format</a></p>
+</blockquote>
+<p>一个<strong>包含所有流</strong>（主要是音频和视频）的单个文件，它还提供<strong>同步和常规元数据</strong>，例如标题，分辨率等。</p>
+<p>通常，我们可以通过查看文件的扩展名来推断文件的格式：例如<code>video.webm</code>可能是使用容器<a href="https://www.webmproject.org/"><code>webm</code></a>的视频。</p>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\container.png" alt="container"></p>
+<h1 id="common-video-operations">Common video operations</h1>
+<h2 id="transcoding">Transcoding</h2>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\transcoding.png" alt="transcoding"></p>
+<p><strong>What?</strong> 将其中一个流（音频或视频）从一个CODEC(编解码器)转换为另一个。</p>
+<p><strong>Why?</strong> 有些时候某些设备（电视，智能手机，控制台等）不支持X，但支持Y，并且更加新的CODEC提供更好的压缩率。</p>
+<p><strong>How?</strong> 将<code>H264</code>（AVC）编码的视频转换为<code>H265</code>（HEVC）。</p>
+<h2 id="transmuxing">Transmuxing</h2>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\transmuxing.png" alt="transmuxing"></p>
+<p><strong>What?</strong> 从一种格式（容器）转换为另一种格式</p>
+<p><strong>Why?</strong> 有些时候某些设备（电视，智能手机，控制台等）不支持X，但支持Y，有时新的容器能提供更现代化的功能。</p>
+<p><strong>How?</strong> 将<code>mp4</code>转换为<code>webm</code>。</p>
+<h2 id="transrating">Transrating</h2>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\transrating.png" alt="transrating"></p>
+<p><strong>What?</strong> 更改比特率或生成其他副本的行为。</p>
+<p><strong>Why?</strong> 人们会尝试使用功能较弱的智能手机通过<code>2G</code>连接或在其4K电视上的<code>光纤</code>互联网连接中观看你视频，因此，你应该提供同一视频的多个副本，并使用不同的比特率。</p>
+<p><strong>How?</strong> 生成比特率介于 3856K 和 2000K 之间的副本。</p>
+<h2 id="transsizing">Transsizing</h2>
+<p><img src="file:///c:\Users\bookyue\Desktop\About Video\images\transsizing.png" alt="transsizing"></p>
+<p><strong>What?</strong> 从一种分辨率转换为另一种分辨率</p>
+<p><strong>Why?</strong> 原因与Transrating大致相同。</p>
+<p><strong>How?</strong> 将<code>1080p</code>转换为<code>480p</code>分辨率。</p>
+<hr>
+<blockquote>
+<p>本文翻译引用自：<a href="https://github.com/leandromoreira/ffmpeg-libav-tutorial">ffmpeg-libav-tutorial</a></p>
+</blockquote>
+
+    </body>
+    </html>
